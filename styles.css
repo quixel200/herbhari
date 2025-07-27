@@ -1,4 +1,4 @@
-        :root {
+:root {
             --primary-color: #2c5f2d;
             --secondary-color: #97bc62;
             --accent-color: #f4a261;
@@ -182,6 +182,33 @@
             background: var(--accent-color);
             color: white;
             transform: translateY(-2px);
+        }
+
+        .card {
+            transition: transform 0.3s ease;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-icons .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .social-icons .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .text-success {
+            color: var(--secondary-color) !important;
         }
 
         @media (max-width: 768px) {

@@ -24,6 +24,15 @@
             color: white !important;
         }
 
+        .navbar-brand img {
+            vertical-align: middle;
+            transition: filter 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            filter: brightness(0.5) invert(0.5); /* Slightly dims the logo on hover */
+        }
+
         .navbar-nav .nav-link {
             color: white !important;
             font-weight: 500;
@@ -209,6 +218,19 @@
 
         .text-success {
             color: var(--secondary-color) !important;
+        }
+
+        /* Newsletter Popup Styles */
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        #newsletterMessage {
+            transition: all 0.3s ease;
         }
 
         @media (max-width: 768px) {

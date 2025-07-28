@@ -19,7 +19,7 @@ try {
     $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
     $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
 
-    $stmt = $conn->prepare("INSERT INTO newsletter_subscribers (email, name, phone) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO newsletter_subsribers (email, name, phone) VALUES (?, ?, ?)");
     $stmt->execute([$email, $name, $phone]);
 
     echo json_encode(['success' => true, 'message' => 'Thank you for subscribing!']);

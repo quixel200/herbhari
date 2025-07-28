@@ -15,9 +15,9 @@ try {
     );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
+    $name = filter_input(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+    $email = filter_input(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
+    $phone = filter_input(INPUT_POST, 'phone', FILTER_UNSAFE_RAW);
 
     $stmt = $conn->prepare("INSERT INTO newsletter_subscribers (email, name, phone) VALUES (?, ?, ?)");
     $stmt->execute([$email, $name, $phone]);

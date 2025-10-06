@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /aboutus.html
+Allow: /index.html
+Allow: /images/
+Allow: /styles.css
+
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cgi-bin/
+
+Sitemap: https://www.aswathnaturale.com/sitemap.xml

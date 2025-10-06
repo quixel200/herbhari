@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2c5f2d">
     <title>Aswath Naturale Pvt Ltd - Natural Hair Care Solutions</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -48,7 +51,7 @@
     <section id="home" class="hero-section">
         <div class="container">
             <h1>Aswath Naturale Pvt Ltd.</h1>
-            <p>Transform your life with our premium, all-natural hair oils, vibrant hair dyes, delicious pickles, and nourishing health drinks—crafted for your beauty and wellness.</p>
+            <p>Transform your life with our premium ayurvedic hair oil, 10x Pain relief oil, Dhal Rice powder, Arogya Navaratna powder, delicious pickles, Garlic pepper paste, Nutrient flour mix powder, Home made recipes, beauty and wellness products—crafted for your wellness journey.</p>
 
         </div>
     </section>
@@ -168,7 +171,7 @@
     <!-- Benefits Section -->
     <section id="benefits" class="py-5 bg-light">
         <div class="container">
-            <h2 class="section-title">Why Choose Our Hair Oils?</h2>
+            <h2 class="section-title">Why Choose Our Products?</h2>
             <div class="row">
                 <div class="col-md-4 text-center mb-4">
                     <div class="feature-icon">
@@ -195,8 +198,8 @@
                     <div class="feature-icon">
                         <i class="fas fa-shipping-fast"></i>
                     </div>
-                    <h4>Fast Shipping</h4>
-                    <p>Free shipping on orders over $50. Get your products delivered within 3-5 business days.</p>
+                    <h4>Free Shipping</h4>
+                    <p>Free shipping on orders above Rs 1000. Get your products delivered within 3-5 business days.</p>
                 </div>
                 <div class="col-md-4 text-center mb-4">
                     <div class="feature-icon">
@@ -220,45 +223,204 @@
     <section id="testimonials" class="py-5">
         <div class="container">
             <h2 class="section-title">What Our Customers Say</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="testimonial-card">
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- First slide -->
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Ramachandran FCA</strong><br>
+                                    <small class="text-muted">Chartered Accountant</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Mrs. Punithavalli</strong><br>
+                                    <small class="text-muted">Insurance Advisor</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Aravind Nair</strong>
+                                </div>
+                            </div>
                         </div>
-                        <p>"The Argan Oil Blend has completely transformed my hair! It's shinier, softer, and healthier than ever before."</p>
-                        <strong>- Sarah M.</strong>
+                    </div>
+                    <!-- Second slide -->
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Dr. Venkatesan</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Mr. Magesh</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Senthil Kumar SR</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Third slide -->
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Mrs. Anandi</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Udhayshankar M</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Tree Man Logunathan</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fourth slide -->
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Dhamodaran</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Sundaram</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Rajkumar</strong><br>
+                                    <small class="text-muted">E-Faws</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fifth slide -->
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Divya</strong><br>
+                                    <small class="text-muted">E-Faws</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Customer 14</strong><br>
+                                    <small class="text-muted">Placeholder</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="testimonial-card">
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                    <p>"[Testimonial content here]"</p>
+                                    <strong>Customer 15</strong><br>
+                                    <small class="text-muted">Placeholder</small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="testimonial-card">
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p>"I've been using the Jojoba Growth Oil for 3 months and I can already see new hair growth. Amazing results!"</p>
-                        <strong>- Michael R.</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial-card">
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p>"Natural ingredients that actually work! My hair feels nourished and looks incredibly healthy."</p>
-                        <strong>- Emma L.</strong>
-                    </div>
+                <!-- Carousel controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+                <!-- Carousel indicators -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="3"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="4"></button>
                 </div>
             </div>
         </div>
@@ -300,7 +462,7 @@
                     <h5>Contact Info</h5>
                     <p><i class="fas fa-map-marker-alt"></i> 5 PNR Colony, Trichy Road, Coimbatore - 641018</p>
                     <p><i class="fas fa-phone"></i> +91 97916666100</p>
-                    <p><i class="fas fa-envelope"></i>support@aswathnaturale.com </p>
+                    <p><i class="fas fa-envelope"></i> aswathnaturale@gmail.com</p>
                     <p><i class="fas fa-clock"></i> Mon-Fri: 9AM-6PM IST</p>
                 </div>
             </div>

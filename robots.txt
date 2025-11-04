@@ -10,4 +10,4 @@ Disallow: /private/
 Disallow: /temp/
 Disallow: /cgi-bin/
 
-Sitemap: https://www.aswathnaturale.com/sitemap.xml
+Sitemap: https://www.herbhari.com/sitemap.xml

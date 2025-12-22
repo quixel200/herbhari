@@ -16,6 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($password !== $confirm_password) {
         $error = "Passwords do not match!";
+    } elseif (
+        strlen($password) < 8 ||
+        !preg_match("/[A-Z]/", $password) ||
+        !preg_match("/[a-z]/", $password) ||
+        !preg_match("/[0-9]/", $password) ||
+        !preg_match("/[\W_]/", $password)
+    ) {
+        $error = "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.";
     } else {
         // Check if email or mobile already exists
         $stmt = $conn->prepare("SELECT user_id FROM users WHERE email = ? OR mobile_number = ?");
@@ -143,6 +151,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="password" name="password" class="form-control" required>
                     </div>
+                    <small class="text-muted" style="font-size: 0.8em;">
+                        Must be at least 8 chars, with uppercase, lowercase, number & special char.
+                    </small>
                 </div>
 
                 <div class="mb-4">

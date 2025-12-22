@@ -1,5 +1,9 @@
+<?php session_start();
+require 'db_conn.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,8 +13,34 @@
     <title>Aswath Naturale Pvt Ltd - Natural Hair Care Solutions</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"></style>
+    <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+    /* Cart Indicator Styles */
+    .cart-nav-item {
+        position: relative;
+    }
+
+    .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 50%;
+        padding: 0.25em 0.6em;
+        font-size: 0.75rem;
+        font-weight: bold;
+        line-height: 1;
+        display: none;
+        /* Hidden by default until items added */
+    }
+
+    .cart-badge.show {
+        display: inline-block;
+    }
+</style>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -42,6 +72,32 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="admin_dashboard.php">Admin Panel</a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.php">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">Logout</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.php">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.php">Register</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item cart-nav-item">
+                        <a class="nav-link" href="cart.php">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-badge" class="cart-badge">0</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -51,7 +107,9 @@
     <section id="home" class="hero-section">
         <div class="container">
             <h1>Aswath Naturale Pvt Ltd.</h1>
-            <p>Transform your life with our premium ayurvedic hair oil, 10x Pain relief oil, Dhal Rice powder, Arogya Navaratna powder, delicious pickles, Garlic pepper paste, Nutrient flour mix powder, Home made recipes, beauty and wellness products—crafted for your wellness journey.</p>
+            <p>Transform your life with our premium ayurvedic hair oil, 10x Pain relief oil, Dhal Rice powder, Arogya
+                Navaratna powder, delicious pickles, Garlic pepper paste, Nutrient flour mix powder, Home made recipes,
+                beauty and wellness products—crafted for your wellness journey.</p>
 
         </div>
     </section>
@@ -61,78 +119,50 @@
         <div class="container">
             <h2 class="section-title">Our Premium Products</h2>
             <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="images/ayurvedic_hair_oil.jpg" alt="Ayurvedic Hair Oil" class="img-fluid" style="height: 300px; width: 100%; object-fit: cover;">
-                        </div>
-                        <div class="p-4">
-                            <h4>Ayurvedic Hair Oil</h4>
-                            <p class="text-muted">Premium natural hair oil for healthy and beautiful hair.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="h5 text-primary">₹180</span>
-                                    <small class="text-muted"> / 100ml</small>
+                <?php
+                try {
+                    $stmt = $conn->query("SELECT * FROM products");
+                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    if (count($products) > 0) {
+                        foreach ($products as $product) {
+                            ?>
+                            <div class="col-md-6 mb-4">
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <?php if (!empty($product['image_url'])): ?>
+                                            <img src="<?php echo htmlspecialchars($product['image_url']); ?>"
+                                                alt="<?php echo htmlspecialchars($product['name']); ?>" class="img-fluid">
+                                        <?php else: ?>
+                                            <div class="d-flex justify-content-center align-items-center h-100 bg-light text-muted">No
+                                                Image</div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="p-4">
+                                        <h4><?php echo htmlspecialchars($product['name']); ?></h4>
+                                        <p class="text-muted"><?php echo htmlspecialchars($product['description']); ?></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span
+                                                    class="h5 text-primary">₹<?php echo number_format($product['price']); ?></span>
+                                                <small class="text-muted"> / unit</small>
+                                            </div>
+                                            <button class="btn btn-primary" data-id="<?php echo $product['product_id']; ?>"
+                                                data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                                data-price="<?php echo $product['price']; ?>">Add to Cart</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button class="btn btn-primary">Add to Cart</button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="images/pain_oil.jpg" alt="Pain Relief Oil" class="img-fluid" style="height: 300px; width: 100%; object-fit: cover;">
-                        </div>
-                        <div class="p-4">
-                            <h4>Ayurvedic Pain Relief Oil</h4>
-                            <p class="text-muted">Natural pain relief oil for effective relief from body aches.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="h5 text-primary">₹200</span>
-                                    <small class="text-muted"> / 100ml</small>
-                                </div>
-                                <button class="btn btn-primary">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="images/arogya_navaratna_powder.jpg" alt="Aswath Navaratna Arogya Powder" class="img-fluid" style="height: 300px; width: 100%; object-fit: cover;">
-                        </div>
-                        <div class="p-4">
-                            <h4>Aswath Navaratna Arogya Powder</h4>
-                            <p class="text-muted">Premium health supplement powder for overall wellness.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="h5 text-primary">₹160</span>
-                                    <small class="text-muted"> / 100g</small>
-                                </div>
-                                <button class="btn btn-primary">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="images/dhal_rice_powder.jpeg" alt="Aswath Dhal Rice Powder" class="img-fluid" style="height: 300px; width: 100%; object-fit: cover;">
-                        </div>
-                        <div class="p-4">
-                            <h4>Aswath Dhal Rice Powder</h4>
-                            <p class="text-muted">Nutritious dhal rice powder for a healthy diet.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="h5 text-primary">₹95</span>
-                                    <small class="text-muted"> / 100g</small>
-                                </div>
-                                <button class="btn btn-primary">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <?php
+                        }
+                    } else {
+                        echo '<div class="col-12 text-center"><p>No products found in the database.</p></div>';
+                    }
+                } catch (PDOException $e) {
+                    echo '<div class="col-12 text-center text-danger"><p>Error loading products.</p></div>';
+                }
+                ?>
             </div>
 
             <!-- Shipping Information -->
@@ -140,7 +170,8 @@
                 <div class="col-12">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h4 class="card-title mb-4"><i class="fas fa-shipping-fast me-2"></i>Shipping Information</h4>
+                            <h4 class="card-title mb-4"><i class="fas fa-shipping-fast me-2"></i>Shipping Information
+                            </h4>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center mb-3">
@@ -178,14 +209,16 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <h4>100% Natural</h4>
-                    <p>Our hair oils are made from the finest natural ingredients, free from harmful chemicals and sulfates.</p>
+                    <p>Our hair oils are made from the finest natural ingredients, free from harmful chemicals and
+                        sulfates.</p>
                 </div>
                 <div class="col-md-4 text-center mb-4">
                     <div class="feature-icon">
                         <i class="fas fa-flask"></i>
                     </div>
                     <h4>Scientifically Tested</h4>
-                    <p>Each formula is rigorously tested for safety and effectiveness by our team of hair care experts.</p>
+                    <p>Each formula is rigorously tested for safety and effectiveness by our team of hair care experts.
+                    </p>
                 </div>
                 <div class="col-md-4 text-center mb-4">
                     <div class="feature-icon">
@@ -213,7 +246,8 @@
                         <i class="fas fa-headset"></i>
                     </div>
                     <h4>24/7 Support</h4>
-                    <p>Our customer service team is available round the clock to help with any questions or concerns.</p>
+                    <p>Our customer service team is available round the clock to help with any questions or concerns.
+                    </p>
                 </div>
             </div>
         </div>
@@ -231,10 +265,13 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I used pain relief oil for my shoulder pain. I find good relief, although I tried many oils earlier, but Aswath Pain Relief Oil is very effective. I got relief in just 60 seconds."</p>
+                                    <p>"I used pain relief oil for my shoulder pain. I find good relief, although I
+                                        tried many oils earlier, but Aswath Pain Relief Oil is very effective. I got
+                                        relief in just 60 seconds."</p>
                                     <strong>Auditor Ramachandran FCA</strong><br>
                                     <small class="text-muted">72 years, Coimbatore | +91 98943-36441</small>
                                 </div>
@@ -242,10 +279,13 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I purchased and used Navaratna Arogya Powder. I am diabetic, the ingredients are working miracles, my sugar levels have come down to normal in just a week. I feel more energetic these days as my sugar levels are under control."</p>
+                                    <p>"I purchased and used Navaratna Arogya Powder. I am diabetic, the ingredients are
+                                        working miracles, my sugar levels have come down to normal in just a week. I
+                                        feel more energetic these days as my sugar levels are under control."</p>
                                     <strong>Aravind</strong><br>
                                     <small class="text-muted">70 years, Gudalur | +91 6381236304</small>
                                 </div>
@@ -253,10 +293,13 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I had knee pain for almost 10 years tried several remedies but did not get relief. I used Aswath pain relief oil and got good relief the ingredients are working well."</p>
+                                    <p>"I had knee pain for almost 10 years tried several remedies but did not get
+                                        relief. I used Aswath pain relief oil and got good relief the ingredients are
+                                        working well."</p>
                                     <strong>Bharathy</strong><br>
                                     <small class="text-muted">70 years, Gudalur</small>
                                 </div>
@@ -269,10 +312,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I used Aswath Ayurvedic Hair Oil. After using this oil for 20 days I see good hair growth and Hair fall has reduced drastically. I got amazing results."</p>
+                                    <p>"I used Aswath Ayurvedic Hair Oil. After using this oil for 20 days I see good
+                                        hair growth and Hair fall has reduced drastically. I got amazing results."</p>
                                     <strong>Lakshmi Priya</strong><br>
                                     <small class="text-muted">Qatar</small>
                                 </div>
@@ -280,10 +325,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I used Arogya Navaratna Powder for the last 5 days my sugar levels have dropped from almost over 280 to below 150. I see good improvement."</p>
+                                    <p>"I used Arogya Navaratna Powder for the last 5 days my sugar levels have dropped
+                                        from almost over 280 to below 150. I see good improvement."</p>
                                     <strong>Vedavalli</strong><br>
                                     <small class="text-muted">Insurance Advisor</small>
                                 </div>
@@ -291,10 +338,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I am 73 years diabetic and had wounds on my foot which did not heal for long. I tried applying Aswath Pain relief oil and the wound is healing."</p>
+                                    <p>"I am 73 years diabetic and had wounds on my foot which did not heal for long. I
+                                        tried applying Aswath Pain relief oil and the wound is healing."</p>
                                     <strong>Murugesan</strong><br>
                                     <small class="text-muted">73 years, Tiruchirappalli</small>
                                 </div>
@@ -307,10 +356,13 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I am using the Arogya Navaratna Powder, and I feel more energetic, and I have good appetite and am getting good sleep. This product's ingredients are working well."</p>
+                                    <p>"I am using the Arogya Navaratna Powder, and I feel more energetic, and I have
+                                        good appetite and am getting good sleep. This product's ingredients are working
+                                        well."</p>
                                     <strong>Rajkumar. M</strong><br>
                                     <small class="text-muted">43 years, Coimbatore | +91 79042 72439</small>
                                 </div>
@@ -318,10 +370,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I tried the Pain relief oil for my sinus problem, and it has given me good relief, and I feel a lot better now. Thanks to Aswath Naturale."</p>
+                                    <p>"I tried the Pain relief oil for my sinus problem, and it has given me good
+                                        relief, and I feel a lot better now. Thanks to Aswath Naturale."</p>
                                     <strong>Senthilkumar SR</strong><br>
                                     <small class="text-muted">51 years, Coimbatore | +91 98425-40568</small>
                                 </div>
@@ -329,10 +383,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I have been diabetic for the past 8 years. With 10 days of continuous use of Arogya Navaratna Powder, my sugar levels have dropped to almost 110."</p>
+                                    <p>"I have been diabetic for the past 8 years. With 10 days of continuous use of
+                                        Arogya Navaratna Powder, my sugar levels have dropped to almost 110."</p>
                                     <strong>Mrs. Anandhi</strong><br>
                                     <small class="text-muted">54 years, Coimbatore</small>
                                 </div>
@@ -345,10 +401,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I used pain relief oil for my shoulder pain, and the pain has reduced very much. The product is excellent."</p>
+                                    <p>"I used pain relief oil for my shoulder pain, and the pain has reduced very much.
+                                        The product is excellent."</p>
                                     <strong>Udhayshankar M</strong><br>
                                     <small class="text-muted">Mob: +91 9843020263</small>
                                 </div>
@@ -356,10 +414,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I used Arogya Navartna Powder my cholesterol levels and BP have become normal. I feel more energetic these days to travel and work."</p>
+                                    <p>"I used Arogya Navartna Powder my cholesterol levels and BP have become normal. I
+                                        feel more energetic these days to travel and work."</p>
                                     <strong>Treeman Logunathan</strong><br>
                                     <small class="text-muted">60 years</small>
                                 </div>
@@ -367,10 +427,12 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I used Pain relief oil for my leg and knee pain. I am happy to state that I got immediate relief, and the product is really working well."</p>
+                                    <p>"I used Pain relief oil for my leg and knee pain. I am happy to state that I got
+                                        immediate relief, and the product is really working well."</p>
                                     <strong>Dhamodaran</strong><br>
                                     <small class="text-muted">79 years, Coimbatore</small>
                                 </div>
@@ -383,10 +445,13 @@
                             <div class="col-md-4">
                                 <div class="testimonial-card">
                                     <div class="testimonial-rating">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i>
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
-                                    <p>"I purchased Arogya Navaratna Powder as I felt tired and lack of sleep. After using this product I am getting better sleep, less stress and feel more energised."</p>
+                                    <p>"I purchased Arogya Navaratna Powder as I felt tired and lack of sleep. After
+                                        using this product I am getting better sleep, less stress and feel more
+                                        energised."</p>
                                     <strong>Sundaram</strong><br>
                                     <small class="text-muted">64 years, Coimbatore</small>
                                 </div>
@@ -395,15 +460,18 @@
                     </div>
                 </div>
                 <!-- Carousel controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </button>
                 <!-- Carousel indicators -->
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0"
+                        class="active"></button>
                     <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
                     <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
                     <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="3"></button>
@@ -419,7 +487,8 @@
             <div class="row">
                 <div class="col-md-4">
                     <h5><i class="fas fa-leaf"></i> Aswath Naturale</h5>
-                    <p>Premium natural products for health, beauty, and wellness. Transform your lifestyle with our expertly crafted products.</p>
+                    <p>Premium natural products for health, beauty, and wellness. Transform your lifestyle with our
+                        expertly crafted products.</p>
                     <div class="social-icons">
                         <a href="https://www.facebook.com/share/16VZh3Cydb/"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/herbhari_india"><i class="fab fa-instagram"></i></a>
@@ -441,8 +510,10 @@
                     <ul class="list-unstyled">
                         <li><a href="#">FAQ</a></li>
                         <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="return_policy.php">Returns & Refunds</a></li>
+                        <li><a href="privacy_policy.php">Privacy Policy</a></li>
+                        <li><a href="terms_conditions.php">Terms & Conditions</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -514,23 +585,74 @@
         });
 
         // Add to cart functionality
+        function updateCartBadge() {
+            fetch('api/cart_actions.php?action=count')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('cart-badge');
+                    if (data.success && data.count > 0) {
+                        badge.textContent = data.count;
+                        badge.classList.add('show');
+                    } else {
+                        badge.classList.remove('show');
+                    }
+                })
+                .catch(err => console.error('Error fetching cart count:', err));
+        }
+
+        // Initial check
+        updateCartBadge();
+
         document.querySelectorAll('.btn-primary').forEach(button => {
             if (button.textContent.includes('Add to Cart')) {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const originalText = this.textContent;
-                    this.textContent = 'Added!';
-                    this.style.backgroundColor = '#28a745';
-                    
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                        this.style.backgroundColor = '';
-                    }, 2000);
+
+                    // Use data attributes set in the PHP loop
+                    const productId = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const price = this.getAttribute('data-price');
+
+                    if (!productId) {
+                        alert('Error: Product ID not found');
+                        return;
+                    }
+
+                    fetch('api/cart_actions.php?action=add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            name: name,
+                            price: price
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.textContent = 'Added!';
+                                this.style.backgroundColor = '#28a745';
+                                updateCartBadge();
+
+                                setTimeout(() => {
+                                    this.textContent = originalText;
+                                    this.style.backgroundColor = '';
+                                }, 2000);
+                            } else {
+                                alert('Failed to add to cart');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
                 });
             }
         });
 
         // Navbar background change on scroll
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
                 navbar.style.backgroundColor = 'rgba(44, 95, 45, 0.95)';
@@ -539,7 +661,7 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Show popup after 3 seconds
             setTimeout(() => {
                 if (!localStorage.getItem('newsletterShown')) {
@@ -548,36 +670,37 @@
             }, 3000);
 
             // Handle form submission
-            document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            document.getElementById('newsletterForm').addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 const formData = new FormData(this);
                 const messageDiv = document.getElementById('newsletterMessage');
-                
+
                 fetch('process_newsletter.php', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    messageDiv.style.display = 'block';
-                    messageDiv.className = data.success ? 'alert alert-success' : 'alert alert-danger';
-                    messageDiv.textContent = data.message;
-                    
-                    if (data.success) {
-                        localStorage.setItem('newsletterShown', 'true');
-                        setTimeout(() => {
-                            bootstrap.Modal.getInstance(document.getElementById('newsletterPopup')).hide();
-                        }, 2000);
-                    }
-                })
-                .catch(error => {
-                    messageDiv.style.display = 'block';
-                    messageDiv.className = 'alert alert-danger';
-                    messageDiv.textContent = 'An error occurred. Please try again later.';
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        messageDiv.style.display = 'block';
+                        messageDiv.className = data.success ? 'alert alert-success' : 'alert alert-danger';
+                        messageDiv.textContent = data.message;
+
+                        if (data.success) {
+                            localStorage.setItem('newsletterShown', 'true');
+                            setTimeout(() => {
+                                bootstrap.Modal.getInstance(document.getElementById('newsletterPopup')).hide();
+                            }, 2000);
+                        }
+                    })
+                    .catch(error => {
+                        messageDiv.style.display = 'block';
+                        messageDiv.className = 'alert alert-danger';
+                        messageDiv.textContent = 'An error occurred. Please try again later.';
+                    });
             });
         });
     </script>
 </body>
+
 </html>

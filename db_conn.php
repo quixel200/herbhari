@@ -11,9 +11,12 @@ $password = $env['DB_PASSWORD'] ?? '';
 $db_name = $env['DB_DATABASE'] ?? 'herbhari';
 
 try {
-    $conn = new PDO("mysql:host=$sname;dbname=$db_name", $uname, $password);
+    $conn = new PDO(
+        "mysql:host={$env['DB_HOST']};dbname={$env['DB_NAME']}",
+        $env['DB_USER'],
+        $env['DB_PASS']
+    );
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-    exit();
+    die("Connection failed: " . $e->getMessage());
 }

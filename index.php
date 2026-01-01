@@ -121,40 +121,61 @@ require 'db_conn.php';
             <div class="row">
                 <?php
                 try {
-                    $stmt = $conn->query("SELECT * FROM products");
+                    $stmt = $conn->query("SELECT * FROM products ORDER BY category, name");
                     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     if (count($products) > 0) {
+                        // Group products by category
+                        $productsByCategory = [];
                         foreach ($products as $product) {
-                            ?>
-                            <div class="col-md-6 mb-4">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <?php if (!empty($product['image_url'])): ?>
-                                            <img src="<?php echo htmlspecialchars($product['image_url']); ?>"
-                                                alt="<?php echo htmlspecialchars($product['name']); ?>" class="img-fluid">
-                                        <?php else: ?>
-                                            <div class="d-flex justify-content-center align-items-center h-100 bg-light text-muted">No
-                                                Image</div>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="p-4">
-                                        <h4><?php echo htmlspecialchars($product['name']); ?></h4>
-                                        <p class="text-muted"><?php echo htmlspecialchars($product['description']); ?></p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span
-                                                    class="h5 text-primary">₹<?php echo number_format($product['price']); ?></span>
-                                                <small class="text-muted"> / unit</small>
+                            $category = $product['category'] ?? 'General';
+                            if (!isset($productsByCategory[$category])) {
+                                $productsByCategory[$category] = [];
+                            }
+                            $productsByCategory[$category][] = $product;
+                        }
+
+                        // Display products by category
+                        foreach ($productsByCategory as $category => $categoryProducts) {
+                            echo '<div class="col-12 mb-4"><h1 class="border-bottom pb-2">' . htmlspecialchars($category) . '</h1></div>';
+
+                            foreach ($categoryProducts as $product) {
+                                ?>
+                                <div class="col-md-4 mb-4">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <a href="product_details.php?id=<?php echo $product['product_id']; ?>">
+                                                <?php if (!empty($product['image_url'])): ?>
+                                                    <img src="<?php echo htmlspecialchars($product['image_url']); ?>"
+                                                        alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                                        style="width: 100%; height: 100%; object-fit: contain;">
+                                                <?php else: ?>
+                                                    <div class="d-flex justify-content-center align-items-center h-100 bg-light text-muted">
+                                                        No
+                                                        Image</div>
+                                                <?php endif; ?>
+                                            </a>
+                                        </div>
+                                        <div class="p-4">
+                                            <h4><a href="product_details.php?id=<?php echo $product['product_id']; ?>"
+                                                    class="text-decoration-none text-dark"><?php echo htmlspecialchars($product['name']); ?></a>
+                                            </h4>
+                                            <p class="text-muted"><?php echo htmlspecialchars($product['description']); ?></p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span
+                                                        class="h5 text-primary">₹<?php echo number_format($product['price']); ?></span>
+                                                    <small class="text-muted"> / unit</small>
+                                                </div>
+                                                <button class="btn btn-primary" data-id="<?php echo $product['product_id']; ?>"
+                                                    data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                                    data-price="<?php echo $product['price']; ?>">Add to Cart</button>
                                             </div>
-                                            <button class="btn btn-primary" data-id="<?php echo $product['product_id']; ?>"
-                                                data-name="<?php echo htmlspecialchars($product['name']); ?>"
-                                                data-price="<?php echo $product['price']; ?>">Add to Cart</button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <?php
+                                <?php
+                            }
                         }
                     } else {
                         echo '<div class="col-12 text-center"><p>No products found in the database.</p></div>';

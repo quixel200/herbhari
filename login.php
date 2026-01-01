@@ -20,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: index.php");
             exit();
         } else {
-            $error = "Invalid password!";
+            $error = "Invalid username or password!";
         }
     } else {
-        $error = "User not found!";
+        $error = "Invalid username or password!";
     }
 }
 ?>

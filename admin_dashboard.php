@@ -114,6 +114,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 
                                     <th>ID</th>
                                     <th>Image</th>
                                     <th>Name</th>
+                                    <th>Category</th>
                                     <th>Price</th>
                                     <th>Stock</th>
                                     <th>Action</th>
@@ -131,10 +132,11 @@ $products = $conn->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 
                                         <?php endif; ?>
                                     </td>
                                     <td><?php echo htmlspecialchars($p['name']); ?></td>
+                                    <td><span class="badge bg-secondary"><?php echo htmlspecialchars($p['category']); ?></span></td>
                                     <td>₹<?php echo number_format($p['price'], 2); ?></td>
                                     <td><?php echo $p['stock_quantity']; ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                        <a href="edit_product.php?id=<?php echo $p['product_id']; ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
                                         <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>

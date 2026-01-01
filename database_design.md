@@ -19,14 +19,24 @@ erDiagram
     
     PRODUCTS ||--o{ ORDER_ITEMS : "included in"
     PRODUCTS ||--o{ CART_ITEMS : "added to"
+    PRODUCTS ||--o{ PRODUCT_IMAGES : "has gallery"
     PRODUCTS {
         int product_id PK
         string name
         text description
+        text detailed_description
+        text benefits
         decimal price
+        string category
         string image_url
         int stock_quantity
         timestamp created_at
+    }
+
+    PRODUCT_IMAGES {
+        int image_id PK
+        int product_id FK
+        string image_url
     }
 
     CART ||--o{ CART_ITEMS : contains
@@ -86,9 +96,12 @@ Stores product details.
 |-------------|-----------|-------------|-------------|
 | `product_id` | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the product |
 | `name` | VARCHAR(100) | NOT NULL | Name of the product |
-| `description` | TEXT | NULL | Detailed description of the product |
+| `description` | TEXT | NULL | Short description of the product |
+| `detailed_description` | TEXT | NULL | Full detailed description |
+| `benefits` | TEXT | NULL | List of key benefits (new line separated) |
 | `price` | DECIMAL(10, 2) | NOT NULL | Price of the product |
-| `image_url` | VARCHAR(255) | NULL | Path or URL to the product image |
+| `category` | VARCHAR(100) | DEFAULT 'General' | Product category |
+| `image_url` | VARCHAR(255) | NULL | Path or URL to the main product image |
 | `stock_quantity` | INT | DEFAULT 0 | Current stock level |
 | `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Product entry time |
 
@@ -135,6 +148,15 @@ Stores the products included in a finalized order. It records the price at the t
 | `quantity` | INT | NOT NULL | Quantity ordered |
 | `price` | DECIMAL(10, 2) | NOT NULL | Price per unit at time of order |
 
+### 7. Product_Images Table
+Stores additional gallery images for products.
+
+| Column Name | Data Type | Constraints | Description |
+|-------------|-----------|-------------|-------------|
+| `image_id` | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the image |
+| `product_id` | INT | FOREIGN KEY | Links to the Product |
+| `image_url` | VARCHAR(255) | NOT NULL | Path or URL to the image |
+
 ## SQL Creation Queries
 
 You can run the following SQL commands in your database management tool (e.g., phpMyAdmin) to create the tables.
@@ -157,7 +179,10 @@ CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
+    detailed_description TEXT,
+    benefits TEXT,
     price DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(100) DEFAULT 'General',
     image_url VARCHAR(255),
     stock_quantity INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -201,6 +226,14 @@ CREATE TABLE order_items (
     quantity INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+);
+
+-- Create Product Images Table
+CREATE TABLE product_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 );
 ```

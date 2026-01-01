@@ -52,10 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($name) || empty($price)) {
             $error = "Name and Price are required.";
         } else {
-            $sql = "INSERT INTO products (name, description, price, stock_quantity, image_url) VALUES (?, ?, ?, ?, ?)";
+            $category = $_POST['category'] ?? 'General';
+            $detailed_description = $_POST['detailed_description'] ?? '';
+            $benefits = $_POST['benefits'] ?? '';
+
+            $sql = "INSERT INTO products (name, description, detailed_description, benefits, price, stock_quantity, category, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try {
                 $stmt = $conn->prepare($sql);
-                if ($stmt->execute([$name, $description, $price, $stock, $image_url])) {
+                if ($stmt->execute([$name, $description, $detailed_description, $benefits, $price, $stock, $category, $image_url])) {
                     $message = "Product added successfully!";
                 } else {
                     $error = "Failed to add product.";
@@ -122,8 +126,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Description</label>
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-select" required>
+                                    <option value="General">General</option>
+                                    <option value="Hair Care">Hair Care</option>
+                                    <option value="Skin Care">Skin Care</option>
+                                    <option value="Pain Relief">Pain Relief</option>
+                                    <option value="Health Mix">Health Mix</option>
+                                    <option value="Food Products">Food Products</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Short Description</label>
                                 <textarea name="description" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Detailed Description</label>
+                                <textarea name="detailed_description" class="form-control" rows="5"
+                                    placeholder="Enter full product details..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Key Benefits</label>
+                                <textarea name="benefits" class="form-control" rows="5"
+                                    placeholder="Enter each benefit on a new line..."></textarea>
                             </div>
 
                             <div class="mb-3">

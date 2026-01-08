@@ -10,7 +10,7 @@ require 'db_conn.php';
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#2c5f2d">
-    <title>Aswath Naturale Pvt Ltd - Natural Hair Care Solutions</title>
+    <title>Aswath Naturale Pvt Ltd</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">

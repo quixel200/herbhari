@@ -59,7 +59,9 @@ erDiagram
         int order_id PK
         int user_id FK
         decimal total_amount
-        enum status "pending, shipped, delivered, cancelled"
+        string razorpay_order_id
+        string razorpay_payment_id
+        enum status "pending, paid, shipped, delivered, cancelled"
         text shipping_address
         timestamp created_at
     }
@@ -133,7 +135,9 @@ Stores order information after checkout.
 | `order_id` | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the order |
 | `user_id` | INT | FOREIGN KEY | Links to the User who placed the order |
 | `total_amount` | DECIMAL(10, 2) | NOT NULL | Total cost of the order |
-| `status` | ENUM | DEFAULT 'pending' | Order status |
+| `razorpay_order_id` | VARCHAR(255) | NULL | Razorpay Order ID |
+| `razorpay_payment_id` | VARCHAR(255) | NULL | Razorpay Payment ID |
+| `status` | ENUM | DEFAULT 'pending' | Order status: pending, paid, shipped, delivered, cancelled |
 | `shipping_address` | TEXT | NOT NULL | Address for delivery |
 | `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Order placement time |
 
@@ -212,7 +216,9 @@ CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
-    status ENUM('pending', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
+    razorpay_order_id VARCHAR(255),
+    razorpay_payment_id VARCHAR(255),
+    status ENUM('pending', 'paid', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
     shipping_address TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE

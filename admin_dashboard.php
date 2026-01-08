@@ -55,7 +55,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 
                 <a href="admin_dashboard.php" class="active"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
                 <a href="add_product.php"><i class="fas fa-plus me-2"></i> Add Product</a>
                 <a href="#"><i class="fas fa-box me-2"></i> Manage Products</a>
-                <a href="#"><i class="fas fa-shopping-bag me-2"></i> Orders</a>
+                <a href="admin_orders.php"><i class="fas fa-shopping-bag me-2"></i> Orders</a>
                 <a href="#"><i class="fas fa-users me-2"></i> Users</a>
                 <a href="index.php" target="_blank" class="mt-4"><i class="fas fa-external-link-alt me-2"></i> View Website</a>
                 <a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
@@ -65,6 +65,20 @@ $products = $conn->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 
         <!-- Main Content -->
         <div class="flex-grow-1 p-4 bg-light">
             <h2 class="mb-4">Dashboard Overview</h2>
+            
+            <?php if (isset($_GET['msg'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?php echo htmlspecialchars($_GET['msg']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_GET['error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?php echo htmlspecialchars($_GET['error']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
             
             <div class="row mb-4">
                 <div class="col-md-3">
@@ -137,7 +151,7 @@ $products = $conn->query("SELECT * FROM products ORDER BY created_at DESC LIMIT 
                                     <td><?php echo $p['stock_quantity']; ?></td>
                                     <td>
                                         <a href="edit_product.php?id=<?php echo $p['product_id']; ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
-                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        <a href="delete_product.php?id=<?php echo $p['product_id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this product?');"><i class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

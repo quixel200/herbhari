@@ -52,7 +52,7 @@ if ($generated_signature === $razorpay_signature) {
         // Insert Order Items
         $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
         foreach ($cart as $item) {
-            $stmt->execute([$order_id, $item['id'], $item['quantity'], $item['price']]);
+            $stmt->execute([$order_id, $item['product_id'], $item['quantity'], $item['price']]);
         }
 
         // Clear Cart

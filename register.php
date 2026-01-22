@@ -83,11 +83,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #1e421f;
             border-color: #1e421f;
         }
+
+        /* Cursor pointer for the eye icon */
+        .password-toggle {
+            cursor: pointer;
+            background-color: white;
+            border-left: none;
+        }
+
+        /* Remove default right border of password input to make it blend with icon */
+        .password-input {
+            border-right: none;
+        }
     </style>
 </head>
 
 <body class="bg-light">
-    <!-- Navbar (Simplified) -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top" style="background-color: #2c5f2d !important;">
         <div class="container">
             <a class="navbar-brand" href="index.php">
@@ -106,11 +117,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h2 class="text-center mb-4" style="color: #2c5f2d;">Create Account</h2>
 
             <?php if ($error): ?>
-                <div class="alert alert-danger"><?php echo $error; ?></div>
+                <div class="alert alert-danger">
+                    <?php echo $error; ?>
+                </div>
             <?php endif; ?>
 
             <?php if ($success): ?>
-                <div class="alert alert-success"><?php echo $success; ?></div>
+                <div class="alert alert-success">
+                    <?php echo $success; ?>
+                </div>
             <?php endif; ?>
 
             <form method="POST" action="">
@@ -149,7 +164,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label">Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" name="password" class="form-control" required>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                        <span class="input-group-text password-toggle"
+                            onclick="togglePasswordVisibility('password', 'pass-icon')">
+                            <i class="fas fa-eye" id="pass-icon"></i>
+                        </span>
                     </div>
                     <small class="text-muted" style="font-size: 0.8em;">
                         Must be at least 8 chars, with uppercase, lowercase, number & special char.
@@ -160,7 +179,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label">Confirm Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" name="confirm_password" class="form-control" required>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control"
+                            required>
+                        <span class="input-group-text password-toggle"
+                            onclick="togglePasswordVisibility('confirm_password', 'confirm-pass-icon')">
+                            <i class="fas fa-eye" id="confirm-pass-icon"></i>
+                        </span>
                     </div>
                 </div>
 
@@ -173,5 +197,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </body>
+
+<script>
+    function togglePasswordVisibility(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 
 </html>

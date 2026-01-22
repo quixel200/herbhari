@@ -540,7 +540,7 @@ require 'db_conn.php';
                 <div class="col-md-4">
                     <h5>Contact Info</h5>
                     <p><i class="fas fa-map-marker-alt"></i> 5 PNR Colony, Trichy Road, Coimbatore - 641018</p>
-                    <p><i class="fas fa-phone"></i> +91 97916666100</p>
+                    <p><i class="fas fa-phone"></i> +91 9791666100</p>
                     <p><i class="fas fa-envelope"></i> aswathnaturale@gmail.com</p>
                     <p><i class="fas fa-clock"></i> Mon-Fri: 9AM-6PM IST</p>
                 </div>

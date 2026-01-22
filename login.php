@@ -5,25 +5,21 @@ require 'db_conn.php';
 $error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $identifier = trim($_POST['identifier']); // Can be email or mobile
 
-    $stmt = $conn->prepare("SELECT user_id, username, password_hash, role FROM users WHERE email = ?");
-    $stmt->execute([$email]);
+    // Check if the identifier exists in email OR mobile_number column
+    $stmt = $conn->prepare("SELECT user_id, username, email, mobile_number FROM users WHERE email = ? OR mobile_number = ?");
+    $stmt->execute([$identifier, $identifier]);
 
     if ($stmt->rowCount() > 0) {
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (password_verify($password, $user['password_hash'])) {
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];
-            header("Location: index.php");
-            exit();
-        } else {
-            $error = "Invalid username or password!";
-        }
+        // User exists: Save identifier to session and move to password page
+        $_SESSION['login_identifier'] = $identifier;
+        header("Location: login_verify.php");
+        exit();
     } else {
-        $error = "Invalid username or password!";
+        // User does not exist: Redirect to register
+        header("Location: register.php");
+        exit();
     }
 }
 ?>
@@ -66,7 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="bg-light">
-    <!-- Navbar (Simplified) -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top" style="background-color: #2c5f2d !important;">
         <div class="container">
             <a class="navbar-brand" href="index.php">
@@ -82,34 +77,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="container">
         <div class="auth-container">
-            <h2 class="text-center mb-4" style="color: #2c5f2d;">Welcome Back</h2>
-
-            <?php if ($error): ?>
-                <div class="alert alert-danger"><?php echo $error; ?></div>
-            <?php endif; ?>
+            <h2 class="text-center mb-4" style="color: #2c5f2d;">Sign In</h2>
+            <p class="text-center text-muted mb-4">Enter your email or mobile number to continue</p>
 
             <form method="POST" action="">
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                </div>
-
                 <div class="mb-4">
-                    <label class="form-label">Password</label>
+                    <label class="form-label">Email or Mobile Number</label>
                     <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" name="password" class="form-control" required>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" name="identifier" class="form-control"
+                            placeholder="e.g. user@email.com or +9198765..." required>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                <button type="submit" class="btn btn-primary w-100 py-2">Next</button>
             </form>
 
             <div class="text-center mt-3">
-                <p>Don't have an account? <a href="register.php" style="color: #2c5f2d;">Register here</a></p>
+                <p>New here? <a href="register.php" style="color: #2c5f2d;">Create an account</a></p>
             </div>
         </div>
     </div>
